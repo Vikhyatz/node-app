@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>hallooooooo</h1>
+    <button id="btn">Search</button>
+    <div id="result"></div>
+
+    <script>
+        let btn = document.getElementById('btn');
+        let resultDiv = document.getElementById('result');
+
+        btn.addEventListener('click', () => {
+            let searchTerm = 'ransom'; // Replace 'your search term' with the actual search term input
+
+            fetch(`/search?term=${(searchTerm)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response data
+                    console.log(data)
+                    // Update the HTML to display the results
+                    resultDiv.innerHTML = '';
+
+                    // Example: Display the first track name
+                    if (data.tracks && data.tracks.items.length > 0) {
+
+                        data.tracks.items.forEach((songs) => {
+                            const div = document.createElement("div")
+                            div.classList.add('gridItem')
+                            resultDiv.appendChild(div)
+
+                            // DOM manipulating the random songs tracks fetched by the endpoint
+                            div.innerHTML = `
+                            <div class="gridItem">
+                                <div class="gridImg"><img src="${songs.album.images[1].url}" alt=""></div>
+                                <div class="gridInfo">
+                                    <div id="gridName">${songs.name}</div>
+                                    <div id="gridArtist">${songs.artists[0].name}</div>
+                                </div>
+                            </div>
+                            `
+                        });
+
+
+                        // const trackName = data.tracks.items[0].name;
+                        // resultDiv.innerHTML = `First track: ${trackName}`;
+                    } else {
+                        resultDiv.innerHTML = 'No tracks found';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error making search request:', error);
+                });
+        });
+    </script>
+</body>
+
+</html>
