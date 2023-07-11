@@ -1,20 +1,23 @@
 const express = require('express');
 const axios = require('axios');
 const dotenv = require('dotenv');
+const app = express();
 const path = require('path');
+const port = 3000;
 
 dotenv.config();
 
-const app = express();
+let access_token = ''; // Declare a global variable to store the access_token
+
+// Serve static files from the "public" directory
 app.use(express.static('public'));
-const port = 3000;
 
-let access_token = ''; // Store the access_token in a variable with broader scope
-
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}/login`);
+// Define a route for the home page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
+// Define routes for different button clicks
 app.get('/login', (req, res) => {
     const scopes = 'user-read-private user-read-email'; // Add the required scopes
 
@@ -47,8 +50,7 @@ app.get('/callback', async (req, res) => {
 
         access_token = response.data.access_token; // Store the access_token in the variable
 
-        res.redirect('../index.html');
-
+        res.sendFile(path.join(__dirname, 'public', 'main.html'));
     } catch (error) {
         console.error('Error during token exchange:', error.message);
         res.status(500).send('An error occurred during authorization.');
@@ -65,11 +67,25 @@ app.get('/search', async (req, res) => {
             },
         });
 
-        const searchData = response.data;
-        // Handle the search data and send it back as the response
+        // const searchData = response.data.tracks.items.map(item => {
+        //     return {
+        //         name: item.name,
+        //         artist: item.artists.map(artist => artist.name).join(', '),
+        //         album: item.album.name,
+        //         previewUrl: item.preview_url,
+        //     };
+        // });
+        const searchData = response.data.tracks.items
+
         res.json(searchData);
     } catch (error) {
         console.error('Error making search request:', error.message);
         res.status(500).send('An error occurred while making the search request.');
     }
+});
+
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port http://localhost:${port}`);
 });
