@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search Page</title>
+    <style>
+        .card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .card .info {
+            flex-grow: 1;
+        }
+
+        .card p {
+            margin: 5px 0;
+        }
+
+        .card audio {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>This is the search page</h1>
+    <form>
+        <input type="text" id="searchInput" placeholder="Search">
+        <button type="button" id="searchButton">Search</button>
+    </form>
+    <div id="searchResults"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
